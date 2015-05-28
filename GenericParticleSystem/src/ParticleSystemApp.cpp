@@ -8,6 +8,7 @@ using namespace std;
 
 #include "ParticleSystem.h"
 #include "ParticleRenderer.h"
+#include "Particle.h"
 #include "PhysicsTool.h"
 #include "IntegrationPolicy.h"
 
