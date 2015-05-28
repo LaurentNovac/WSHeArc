@@ -42,7 +42,7 @@ void ParticleSystemApp::update()
     m_pSystem.applyForce([this](ParticleSystemType::ParticleType& particle) {
         auto force = ci::Vec2f(0,0.001);
         vac::physics::apply(particle, force);
-        auto wind = ci::Vec2f(0.001,0.0);
+        auto wind = ci::Vec2f(0.01,0.0);
         vac::physics::apply(particle, wind);
     });
 
@@ -51,10 +51,9 @@ void ParticleSystemApp::update()
 
 void ParticleSystemApp::draw()
 {
-    // clear out the window with black
+    auto origin = getWindowCenter();
     gl::clear(Color::black());
-    m_renderer.render(m_pSystem, [this](const ParticleSystemType::ParticleType& p) {
-        auto origin = getWindowCenter();
+    m_renderer.render(m_pSystem, [this, origin](const ParticleSystemType::ParticleType& p) {
         auto v = origin + p.pos;
         auto radius = p.mass;
         cinder::gl::drawSolidCircle(v, radius);
