@@ -1,14 +1,20 @@
 #pragma once
 
+#include "ParticleTraits.h"
+
 namespace vac {
 struct EulerPolicy {
     template <typename ParticleType>
     static void integrate(ParticleType& p)
     {
-        p.vel += p.acc;
-        p.pos += p.vel;
+        auto& pos = traits::access<ParticleType>::get_pos(p);
+        auto& vel = traits::access<ParticleType>::get_vel(p);
+        auto& acc = traits::access<ParticleType>::get_acc(p);
 
-        p.acc *= 0;
+        vel += acc;
+        pos += vel;
+
+        acc *= 0;
     }
 };
 }
