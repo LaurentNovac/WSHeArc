@@ -34,23 +34,37 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->graphicsView->setSceneRect(-width()/2,-height()/2,width(),height());
+    ui->graphicsView->setRenderHint(QPainter::Antialiasing, false);
+    ui->graphicsView->resize( width(), height() );
+    ui->graphicsView->setOptimizationFlags(QGraphicsView::DontSavePainterState);
+    ui->graphicsView->setViewportUpdateMode( QGraphicsView::SmartViewportUpdate);
+    ui->graphicsView->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+    ui->graphicsView->setCacheMode(QGraphicsView::CacheBackground);
+    ui->graphicsView->setViewportUpdateMode( QGraphicsView::FullViewportUpdate);
 
     initEventLoop();
     initParticlesData();
+    m_time.start();
 }
 
 void MainWindow::updateParticles(){
-    m_pSystem.applyForce([this](ParticleSystemType::ParticleType& particle) {
-        auto force = QVector2D(0,0.01);
+    double dt = m_time.elapsed()/100.0; //in second
+
+    m_pSystem.applyForce([this](ParticleSystemType::ParticleType& particle, int i) {
+        auto force = QVector2D(0,.01);
         vac::physics::applyForce(particle, force);
         auto wind = QVector2D(0.0,0.0);
         vac::physics::applyForce(particle, wind);
     });
 
-    m_pSystem.update();
+    m_pSystem.update(dt);
+    ui->graphicsView->blockSignals(true);
     m_renderer.render(m_pSystem, [this](const ParticleSystemType::ParticleType& p, int i) {
         m_ellipses[i]->setPos(p.pos.x(),p.pos.y());
     });
+    ui->graphicsView->blockSignals(false);
+
+    m_time.restart();
 }
 
 MainWindow::~MainWindow()
@@ -68,7 +82,7 @@ void MainWindow::initEventLoop()
 void MainWindow::initParticlesData()
 {
     QBrush blackBrush(Qt::black);
-    QBrush whiteBrush(Qt::blue);
+    QBrush whiteBrush(Qt::white);
     m_scene->setBackgroundBrush(whiteBrush);
     QPen outlinePen(Qt::black);
     outlinePen.setWidth(1);
@@ -77,7 +91,7 @@ void MainWindow::initParticlesData()
         p.pos = QVector2D(0,0);
 
         auto randDir = randVec2f();
-        auto velocity = randFloat(1);
+        auto velocity = randFloat(5);
         p.vel = velocity*randDir;
         p.mass = randFloat(10);
         m_ellipses.push_back(m_scene->addEllipse(p.pos.x(),p.pos.y(),p.mass,p.mass, outlinePen, blackBrush));

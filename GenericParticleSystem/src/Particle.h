@@ -8,6 +8,5 @@ struct Particle {
     VecType vel;
     VecType acc;
     float mass = 1.0f;
-    float life = 0.0f;
 };
 }

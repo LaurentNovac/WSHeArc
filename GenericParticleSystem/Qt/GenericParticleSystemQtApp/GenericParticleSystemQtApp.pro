@@ -20,8 +20,7 @@ HEADERS  += mainwindow.h \
     ../../src/Particle.h \
     ../../src/ParticleRenderer.h \
     ../../src/ParticleSystem.h \
-    ../../src/PhysicsTool.h \
-    ../../src/ParticleTraits.h
+    ../../src/PhysicsTool.h
 
 INCLUDEPATH+=../../src
 FORMS    += mainwindow.ui

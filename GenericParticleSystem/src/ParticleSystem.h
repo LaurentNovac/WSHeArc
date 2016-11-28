@@ -17,18 +17,19 @@ public:
         }
     }
 
-    void update()
+    void update(double dt)
     {
         for (auto& particle : m_particles) {
-            IntegrationPolicy::integrate(particle);
+            IntegrationPolicy::integrate(particle,dt);
         }
     }
 
     template <typename Fun>
     void applyForce(Fun forceFunc)
     {
+        int i = 0;
         for (auto& particle : m_particles) {
-            forceFunc(particle);
+            forceFunc(particle, i++);
         }
     }
 
