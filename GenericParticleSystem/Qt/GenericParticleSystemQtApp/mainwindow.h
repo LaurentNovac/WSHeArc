@@ -36,6 +36,9 @@ namespace Ui {
 class MainWindow;
 }
 
+const int PARTICLE_COUNT = 100;
+class QGraphicsEllipseItem;
+class QGraphicsScene;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -43,16 +46,19 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    void paintEvent(QPaintEvent *);
+    void initParticlesData();
+
 private:
     Ui::MainWindow *ui;
     ParticleSystemType m_pSystem;
     vac::ParticleRenderer m_renderer;
     QTimer *timer;
-    void updateParticles();
+    QGraphicsScene *m_scene;
+    QVector<QGraphicsEllipseItem*> m_ellipses;
+    void initEventLoop();
 
 public slots:
-    void queryUpdate();
+    void updateParticles();
 };
 
 #endif // MAINWINDOW_H

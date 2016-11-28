@@ -2,9 +2,10 @@
 
 namespace vac {
 
-template <typename ContainerType, typename IntegrationPolicy>
+template <typename ContainerTypeT, typename IntegrationPolicy>
 class ParticleSystem : public IntegrationPolicy {
 public:
+    using ContainerType = ContainerTypeT;
     using ParticleType = typename ContainerType::value_type;
 
     template <typename Fun>

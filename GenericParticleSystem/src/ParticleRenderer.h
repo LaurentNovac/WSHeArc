@@ -9,8 +9,9 @@ public:
     template <typename RenderFun, typename ParticleSystemType>
     void render(const ParticleSystemType& pSystem, RenderFun rFun)
     {
+        int i = 0;
         for (const auto& p : pSystem) {
-            rFun(p);
+            rFun(p, i++);
         }
     }
 };
