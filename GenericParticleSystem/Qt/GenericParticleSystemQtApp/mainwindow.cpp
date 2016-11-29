@@ -10,7 +10,8 @@
 #include <QGraphicsView>
 
 float randFloat(float low, float high){
-    return low + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(high-low)));
+    auto rnd = static_cast<float>(qrand());
+    return low + rnd /(RAND_MAX/(high-low));
 }
 
 float randFloat(float high){
@@ -42,6 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->graphicsView->setCacheMode(QGraphicsView::CacheBackground);
     ui->graphicsView->setViewportUpdateMode( QGraphicsView::FullViewportUpdate);
 
+
     initEventLoop();
     initParticlesData();
     m_time.start();
@@ -53,7 +55,7 @@ void MainWindow::updateParticles(){
     m_pSystem.applyForce([this](ParticleSystemType::ParticleType& particle, int i) {
         auto force = QVector2D(0,.01);
         vac::physics::applyForce(particle, force);
-        auto wind = QVector2D(0.0,0.0);
+        auto wind = QVector2D(0.01,0.0);
         vac::physics::applyForce(particle, wind);
     });
 
@@ -62,6 +64,7 @@ void MainWindow::updateParticles(){
     m_renderer.render(m_pSystem, [this](const ParticleSystemType::ParticleType& p, int i) {
         m_ellipses[i]->setPos(p.pos.x(),p.pos.y());
     });
+    ui->graphicsView->blockSignals(false);
 
     m_time.restart();
 }
