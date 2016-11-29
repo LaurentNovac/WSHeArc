@@ -15,4 +15,17 @@ struct EulerPolicy {
         vel += acc * dt;
     }
 };
+
+struct VerletPolicy {
+    template <typename ParticleType>
+    static void integrate(ParticleType& p, double dt)
+    {
+        auto& pos = traits::access<ParticleType>::get_pos(p);
+        auto& prevPos = traits::access<ParticleType>::get_prevPos(p);
+        auto& acc = traits::access<ParticleType>::get_acc(p);
+
+        pos = pos + (pos - prevPos) + acc * dt;
+        prevPos = pos;
+    }
+};
 }

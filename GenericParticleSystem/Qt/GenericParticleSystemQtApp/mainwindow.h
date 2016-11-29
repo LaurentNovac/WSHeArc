@@ -17,6 +17,10 @@ using ParticleSystemType = vac::ParticleSystem<std::vector<ParticleType>, vac::E
 namespace vac{
 namespace traits{
     template<> struct access<ParticleType>{
+        static QVector2D& get_prevPos(ParticleType& p)
+        {
+            return p.prevPos;
+        }
         static QVector2D& get_pos(ParticleType& p)
         {
             return p.pos;

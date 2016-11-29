@@ -50,10 +50,10 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 void MainWindow::updateParticles(){
-    double dt = m_time.elapsed()/100.0; //in second
+    double dt = m_time.elapsed()/1000.0; //in second
 
     m_pSystem.applyForce([this](ParticleSystemType::ParticleType& particle, int i) {
-        auto force = QVector2D(0,.01);
+        auto force = QVector2D(0,.1);
         vac::physics::applyForce(particle, force);
         auto wind = QVector2D(0.01,0.0);
         vac::physics::applyForce(particle, wind);
@@ -93,7 +93,7 @@ void MainWindow::initParticlesData()
         p.pos = QVector2D(0,0);
 
         auto randDir = randVec2f();
-        auto velocity = randFloat(5);
+        auto velocity = randFloat(100);
         p.vel = velocity*randDir;
         p.mass = randFloat(10);
         m_ellipses.push_back(m_scene->addEllipse(p.pos.x(),p.pos.y(),p.mass,p.mass, outlinePen, blackBrush));
